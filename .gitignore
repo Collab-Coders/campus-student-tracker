@@ -1,0 +1,19 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency folders
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Production Build Outputs
+dist/
+client/dist/
+server/dist/
+
+# IDE / System files
+.DS_Store
+.vscode/
+.idea/
