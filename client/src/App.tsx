@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useStore } from './hooks/useStore';
 import { appLayoutStyles } from './styling/styles';
+import { mockCampuses } from './types';
 
 // Components
 import Dashboard from './pages/Dashboard';
@@ -12,8 +13,9 @@ import Students from './pages/Students';
 function AppContent() {
   const isDarkMode = useStore((state) => state.isDarkMode);
   const toggleDarkMode = useStore((state) => state.toggleDarkMode);
-  const campuses = useStore((state) => state.campuses);
-  const students = useStore((state) => state.students);
+
+  const campuses = mockCampuses;
+  const students = [];
 
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   
@@ -24,8 +26,8 @@ function AppContent() {
     const isActive = location.pathname === path;
     return {
       ...styles.navItem,
-      backgroundColor: isActive ? (isDarkMode ? '#333333' : '#e2e8f0') : 'transparent',
-      color: isActive ? (isDarkMode ? '#ffffff' : '#1a202c') : styles.navItem.color,
+      backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+      color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
     };
   };
 
@@ -33,11 +35,13 @@ function AppContent() {
     <div style={styles.appContainer}>
       
       {/* HAMBURGER MENU BUTTON */}
-      {!isSidebarOpen && (
+      <header style={styles.topHeader}>
         <button type='button' aria-label='hamburger menu button' style={styles.hamburgerButton} onClick={() => setIsSidebarOpen(true)}>
-          <FaBars size={20} />
+          <FaBars size={18} />
         </button>
-      )}
+        <div style={styles.headerLogo}>Campus & Student Hub</div>
+        <div style={{ width: '40px' }} />
+      </header>
 
       {/* DIM BACKDROP CLOSES PANEL WHEN CLICKED OUTSIDE */}
       <div style={styles.backdrop} onClick={() => setIsSidebarOpen(false)} />
@@ -48,7 +52,7 @@ function AppContent() {
           <FaTimes />
         </button>
 
-        <div style={styles.logoSection}>Base EduManager</div>
+        <div style={styles.logoSection}>Campus & Student Hub</div>
         
         <nav>
           <ul style={styles.navLinksStack}>

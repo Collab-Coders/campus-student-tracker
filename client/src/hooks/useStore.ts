@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 
-interface AppState {
+interface StoreState {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
-  campuses: any[];
-  students: any[];
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (isOpen: boolean) => void;
 }
 
-export const useStore = create<AppState>((set) => ({
+export const useStore = create<StoreState>((set) => ({
   isDarkMode: false,
   toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
-  campuses: [],
-  students: [],
+  isSidebarOpen: false,
+  setIsSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
 }));
