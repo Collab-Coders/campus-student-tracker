@@ -5,6 +5,21 @@ export interface Campus {
   address: string;
   description: string;
 }
+export interface CampusDetailProps {
+  campus: Campus;
+  isDarkMode: boolean;
+  styles: any;
+  students: Student[];
+  onBack: () => void;
+  onSave: (updatedCampus: Campus) => void;
+}
+export interface CampusFormProps {
+  mode: 'add' | 'edit';
+  initialData?: Campus | null;
+  styles: any; 
+  onClose: () => void;
+  onSave: (campusData: Omit<Campus, 'id'> & { id?: string }) => void;
+}
 
 export interface Student {
   id: string;
@@ -16,14 +31,13 @@ export interface Student {
   campusId: string; // referring to Campus.id
   status: 'Enrolled' | 'Not Enrolled' | 'Graduated';
 }
-
-export interface CampusDetailProps {
-  campus: Campus;
-  isDarkMode: boolean;
+export interface StudentFormProps {
+  mode: 'add' | 'edit';
+  initialData?: Student | null;
+  campuses: Campus[];
   styles: any;
-  students: Student[];
-  onBack: () => void;
-  onSave: (updatedCampus: Campus) => void;
+  onClose: () => void;
+  onSave: (studentData: Omit<Student, 'id'> & { id?: string }) => void;
 }
 
 // @TODO: dummy data. Need to remove later
@@ -43,4 +57,86 @@ export const mockCampuses: Campus[] = [
   { id: '13', name: 'Harlem Cultural Annex', imageUrl: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=400&auto=format&fit=crop', address: '250 Malcolm X Blvd, New York, NY 10027', description: 'Dedicated to journalism initiatives, sociological historical documentation studies, and non-profit organization programs.' },
   { id: '14', name: 'Stamford Corporate Nexus', imageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=400&auto=format&fit=crop', address: '600 Atlantic St, Stamford, CT 06901', description: 'Bridging financial risk engineering systems, corporate advisory operations, and data analytics certification matrices.' },
   { id: '15', name: 'Astoria Culinary Arts Center', imageUrl: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=400&auto=format&fit=crop', address: '31-10 Broadway, Queens, NY 11106', description: 'State of the art development kitchens mapping restaurant administration models, hospitality guidelines, and food science lines.' }
+];
+export const mockStudents: Student[] = [
+  {
+    id: '101',
+    firstName: 'Alex',
+    lastName: 'Rivera',
+    email: 'arivera@student.edu',
+    gpa: 3.85,
+    imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
+    campusId: '1', // Satellite Manhattan Center
+    status: 'Enrolled'
+  },
+  {
+    id: '102',
+    firstName: 'Jordan',
+    lastName: 'Chen',
+    email: 'jchen@student.edu',
+    gpa: 3.92,
+    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
+    campusId: '2', // Brooklyn Tech Hub
+    status: 'Enrolled'
+  },
+  {
+    id: '103',
+    firstName: 'Taylor',
+    lastName: 'Brooks',
+    email: 'tbrooks@student.edu',
+    gpa: 3.40,
+    imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop',
+    campusId: '2', // Brooklyn Tech Hub
+    status: 'Enrolled'
+  },
+  {
+    id: '104',
+    firstName: 'Morgan',
+    lastName: 'Patel',
+    email: 'mpatel@student.edu',
+    gpa: 3.15,
+    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
+    campusId: '3', // Queens Global Campus
+    status: 'Enrolled'
+  },
+  {
+    id: '105',
+    firstName: 'Sarah',
+    lastName: 'Kaufman',
+    email: 'skaufman@student.edu',
+    gpa: 3.72,
+    imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
+    campusId: '4', // Bronx Medical Academy
+    status: 'Enrolled'
+  },
+  {
+    id: '106',
+    firstName: 'Marcus',
+    lastName: 'Vance',
+    email: 'mvance@student.edu',
+    gpa: 2.98,
+    imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=200&auto=format&fit=crop',
+    campusId: '4', // Bronx Medical Academy
+    status: 'Not Enrolled'
+  },
+  {
+    id: '107',
+    firstName: 'Elena',
+    lastName: 'Rostova',
+    email: 'erostova@student.edu',
+    gpa: 4.00,
+    imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
+    campusId: '7', // Long Island Research Complex
+    status: 'Enrolled'
+  },
+  {
+    id: '108',
+    firstName: 'Riley',
+    lastName: 'O\'Connor',
+    email: 'roconnor@student.edu',
+    gpa: 3.65,
+    imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop',
+    campusId: '8', // Hoboken Arts Pavilion
+    status: 'Graduated'
+  }
 ];

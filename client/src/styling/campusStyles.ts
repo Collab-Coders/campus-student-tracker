@@ -146,6 +146,20 @@ export const campusStyles = (isDarkMode: boolean) => {
     },
 
     /* Form */
+    modalOverlay: {
+      position: 'fixed' as const,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      backdropFilter: 'blur(4px)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000,
+      padding: '20px',
+    },
     formCard: {
       backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
       padding: '32px',
@@ -178,5 +192,18 @@ export const campusStyles = (isDarkMode: boolean) => {
       outline: 'none',
       transition: 'border-color 0.15s ease',
     },
+    formWrapper: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      backdropFilter: 'blur(4px)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000
+    }
   };
 };

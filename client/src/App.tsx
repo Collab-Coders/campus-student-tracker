@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useStore } from './hooks/useStore';
 import { appLayoutStyles } from './styling/styles';
-import { mockCampuses } from './types';
+import { mockCampuses, mockStudents } from './types';
 
 // Components
 import Dashboard from './pages/Dashboard';
@@ -17,7 +17,7 @@ function AppContent() {
   const setIsSidebarOpen = useStore((state) => state.setIsSidebarOpen);
 
   const campuses = mockCampuses;
-  const students = [];
+  const students = mockStudents;
   
   const styles = appLayoutStyles(isDarkMode, isSidebarOpen);
 

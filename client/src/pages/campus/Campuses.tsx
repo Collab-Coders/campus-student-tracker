@@ -3,21 +3,14 @@ import { Link } from 'react-router-dom';
 
 // components
 import CampusDetail from './CampusDetail';
+import CampusForm from './CampusForm'; 
 
 // hooks/types
 import { useStore } from '../../hooks/useStore';
-import { mockCampuses as initialCampuses } from '../../types';
+import { mockCampuses as initialCampuses, mockStudents, Campus } from '../../types';
 
 // styles
 import { campusStyles } from '../../styling/campusStyles';
-
-interface Campus {
-  id: string;
-  name: string;
-  address: string;
-  description: string;
-  imageUrl: string;
-}
 
 export default function Campuses() {
   const isDarkMode = useStore((state) => state.isDarkMode);
@@ -25,65 +18,61 @@ export default function Campuses() {
 
   const [campuses, setCampuses] = useState<Campus[]>(initialCampuses);
   const [selectedCampus, setSelectedCampus] = useState<Campus | null>(null);
-  const [editingCampus, setEditingCampus] = useState<Campus | null>(null);
   
-  // TRACK STATE FOR CREATION PIPELINE
-  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [formModal, setFormModal] = useState<{
+    isOpen: boolean;
+    mode: 'add' | 'edit';
+    targetCampus: Campus | null;
+  }>({
+    isOpen: false,
+    mode: 'add',
+    targetCampus: null,
+  });
 
-  // Unified Form Fields
-  const [formName, setFormName] = useState('');
-  const [formAddress, setFormAddress] = useState('');
-  const [formDescription, setFormDescription] = useState('');
-  const [formImage, setFormImage] = useState('');
-
-  // Open modal for a clean creation form
   const openAddModal = () => {
-    setIsAddingNew(true);
-    setFormName('');
-    setFormAddress('');
-    setFormDescription('');
-    setFormImage('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=400&auto=format&fit=crop'); // reasonable default
+    setFormModal({
+      isOpen: true,
+      mode: 'add',
+      targetCampus: null,
+    });
   };
 
-  // Open modal for updating an existing campus
   const openEditModal = (campus: Campus) => {
-    setEditingCampus(campus);
-    setFormName(campus.name);
-    setFormAddress(campus.address);
-    setFormDescription(campus.description);
-    setFormImage(campus.imageUrl);
+    setFormModal({
+      isOpen: true,
+      mode: 'edit',
+      targetCampus: campus,
+    });
   };
 
   const closeModal = () => {
-    setEditingCampus(null);
-    setIsAddingNew(false);
+    setFormModal({
+      isOpen: false,
+      mode: 'add',
+      targetCampus: null,
+    });
   };
 
-  // Handle Form Submission (Both Adding & Editing)
-  const handleFormSave = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (isAddingNew) {
-      // Create fresh item
+  const handleFormSave = (campusData: Omit<Campus, 'id'> & { id?: string }) => {
+    if (formModal.mode === 'add') {
       const newCampus: Campus = {
-        id: String(Date.now()), // Unique simple string timestamp ID
-        name: formName,
-        address: formAddress,
-        description: formDescription,
-        imageUrl: formImage,
+        id: String(Date.now()), // Unique string timestamp ID
+        name: campusData.name,
+        address: campusData.address,
+        description: campusData.description,
+        imageUrl: campusData.imageUrl,
       };
       setCampuses([newCampus, ...campuses]);
-    } else if (editingCampus) {
-      // Modify current item
+    } else if (formModal.mode === 'edit' && formModal.targetCampus) {
       const updated: Campus = {
-        ...editingCampus,
-        name: formName,
-        address: formAddress,
-        description: formDescription,
-        imageUrl: formImage,
+        ...formModal.targetCampus,
+        name: campusData.name,
+        address: campusData.address,
+        description: campusData.description,
+        imageUrl: campusData.imageUrl,
       };
-      setCampuses(campuses.map((c) => (c.id === editingCampus.id ? updated : c)));
-      if (selectedCampus?.id === editingCampus.id) setSelectedCampus(updated);
+      setCampuses(campuses.map((c) => (c.id === formModal.targetCampus!.id ? updated : c)));
+      if (selectedCampus?.id === formModal.targetCampus.id) setSelectedCampus(updated);
     }
 
     closeModal();
@@ -95,10 +84,12 @@ export default function Campuses() {
   };
 
   if (selectedCampus) {
+    const assignedStudents = mockStudents.filter(student => student.campusId === selectedCampus.id);
+
     return (
       <CampusDetail 
         campus={selectedCampus}
-        students={[]}
+        students={assignedStudents}
         isDarkMode={isDarkMode}
         styles={styles}
         onBack={() => setSelectedCampus(null)}
@@ -107,11 +98,8 @@ export default function Campuses() {
     );
   }
 
-  // Show modal if editing or adding
-  const showModal = isAddingNew || !!editingCampus;
-
   return (
-    <div style={styles.container}>
+    <div className='CampusWrapper' style={styles.container}>
       
       {/* HEADER BAR AREA */}
       <div style={styles.headerArea}>
@@ -180,86 +168,15 @@ export default function Campuses() {
         ))}
       </div>
 
-      {/* ADD/EDIT FORM */}
-      {showModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}>
-          <form onSubmit={handleFormSave} style={{...styles.formCard, width: '90%', maxWidth: '550px', margin: '0 16px'}}>
-            <h2 style={{ ...styles.title, fontSize: '20px', marginBottom: '20px' }}>
-              {isAddingNew ? 'Create New Institutional Campus' : 'Quick Edit Campus'}
-            </h2>
-            
-            <div style={styles.formGroup}>
-              <label htmlFor="modal-name-input" style={styles.formLabel}>Campus Name</label>
-              <input 
-                id="modal-name-input"
-                type="text" 
-                value={formName} 
-                onChange={(e) => setFormName(e.target.value)} 
-                style={styles.formInput}
-                placeholder="e.g., Manhattan Extension Center"
-                required 
-              />
-            </div>
-
-            <div style={styles.formGroup}>
-              <label htmlFor="modal-address-input" style={styles.formLabel}>Location Address</label>
-              <input 
-                id="modal-address-input"
-                type="text" 
-                value={formAddress} 
-                onChange={(e) => setFormAddress(e.target.value)} 
-                style={styles.formInput}
-                placeholder="e.g., 123 Tech Way, New York, NY"
-                required 
-              />
-            </div>
-
-            <div style={styles.formGroup}>
-              <label htmlFor="modal-image-input" style={styles.formLabel}>Banner Image URL</label>
-              <input 
-                id="modal-image-input"
-                type="url" 
-                value={formImage} 
-                onChange={(e) => setFormImage(e.target.value)} 
-                style={styles.formInput}
-                required 
-              />
-            </div>
-
-            <div style={styles.formGroup}>
-              <label htmlFor="modal-description-input" style={styles.formLabel}>Campus Overview Description</label>
-              <textarea 
-                id="modal-description-input"
-                value={formDescription} 
-                onChange={(e) => setFormDescription(e.target.value)} 
-                style={{ ...styles.formInput, minHeight: '100px', resize: 'vertical' }}
-                placeholder="Describe academic facilities, core specializations, or campus environment..."
-                required 
-              />
-            </div>
-
-            <div style={{ display: 'flex', gap: '12px', marginTop: '24px', justifyContent: 'flex-end' }}>
-              <button type="button" onClick={closeModal} style={styles.editButton}>
-                Cancel
-              </button>
-              <button type="submit" style={{ ...styles.viewButton, flex: 'initial' }}>
-                {isAddingNew ? 'Create Campus' : 'Save Changes'}
-              </button>
-            </div>
-          </form>
-        </div>
+      {/* FORM */}
+      {formModal.isOpen && (
+        <CampusForm 
+          mode={formModal.mode}
+          initialData={formModal.targetCampus}
+          styles={styles}
+          onClose={closeModal}
+          onSave={handleFormSave}
+        />
       )}
 
     </div>
