@@ -17,6 +17,15 @@ export interface Student {
   status: 'Enrolled' | 'Not Enrolled' | 'Graduated';
 }
 
+export interface CampusDetailProps {
+  campus: Campus;
+  isDarkMode: boolean;
+  styles: any;
+  students: Student[];
+  onBack: () => void;
+  onSave: (updatedCampus: Campus) => void;
+}
+
 // @TODO: dummy data. Need to remove later
 export const mockCampuses: Campus[] = [
   { id: '1', name: 'Satellite Manhattan Center', imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400&auto=format&fit=crop', address: '123 Enterprise Way, New York, NY 10001', description: 'A bustling urban high-rise campus specializing in technology, finance, and professional networking.' },

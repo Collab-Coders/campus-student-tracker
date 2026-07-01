@@ -1,5 +1,6 @@
 export const campusStyles = (isDarkMode: boolean) => {
   return {
+    // Campus
     container: {
       padding: '12px 4px',
       fontFamily: 'system-ui, sans-serif',
@@ -101,6 +102,81 @@ export const campusStyles = (isDarkMode: boolean) => {
       fontSize: '14px',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
+    },
+
+    // Campus Detail
+    detailContainer: {
+      animation: 'fadeIn 0.2s ease-out',
+    },
+    profileLayout: {
+      display: 'grid',
+      gridTemplateColumns: 'minmax(300px, 450px) 1fr',
+      gap: '32px',
+      backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+      padding: '32px',
+      borderRadius: '12px',
+      boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0,0,0,0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+    },
+    detailImageWrapper: {
+      width: '100%',
+      height: '300px',
+      borderRadius: '8px',
+      overflow: 'hidden',
+    },
+    detailImage: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover' as const,
+    },
+    profileInfo: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
+    addressText: {
+      fontSize: '15px',
+      color: isDarkMode ? '#38bdf8' : '#4f46e5',
+      fontWeight: '600',
+      margin: '4px 0 0 0',
+    },
+    descriptionText: {
+      fontSize: '15px',
+      lineHeight: '1.6',
+      color: isDarkMode ? '#94a3b8' : '#4a5568',
+      margin: 0,
+    },
+
+    /* Form */
+    formCard: {
+      backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+      padding: '32px',
+      borderRadius: '12px',
+      maxWidth: '700px',
+      margin: '0 auto',
+      boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0,0,0,0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+    },
+    formGroup: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      gap: '6px',
+      marginBottom: '16px',
+    },
+    formLabel: {
+      fontSize: '13px',
+      fontWeight: '700',
+      color: isDarkMode ? '#94a3b8' : '#4a5568',
+      textTransform: 'uppercase' as const,
+      letterSpacing: '0.05em',
+    },
+    formInput: {
+      padding: '10px 14px',
+      borderRadius: '8px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      border: isDarkMode ? '1px solid #334155' : '1px solid #cbd5e1',
+      backgroundColor: isDarkMode ? '#0f172a' : '#ffffff',
+      color: isDarkMode ? '#f8fafc' : '#1e293b',
+      outline: 'none',
+      transition: 'border-color 0.15s ease',
     },
   };
 };

@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // hooks/types
-import { useStore } from '../hooks/useStore';
+import { useStore } from '../../hooks/useStore';
 
 // styles
-import { studentStyles } from '../styling/studentStyles';
+import { studentStyles } from '../../styling/studentStyles';
 
 export default function Students() {
   const isDarkMode = useStore((state) => state.isDarkMode);

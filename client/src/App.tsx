@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useStore } from './hooks/useStore';
 import { appLayoutStyles } from './styling/styles';
@@ -7,8 +7,8 @@ import { mockCampuses } from './types';
 
 // Components
 import Dashboard from './pages/Dashboard';
-import Campuses from './pages/Campuses';
-import Students from './pages/Students';
+import Campuses from './pages/campus/Campuses';
+import Students from './pages/students/Students';
 
 function AppContent() {
   const isDarkMode = useStore((state) => state.isDarkMode);
@@ -19,17 +19,7 @@ function AppContent() {
   const campuses = mockCampuses;
   const students = [];
   
-  const location = useLocation();
   const styles = appLayoutStyles(isDarkMode, isSidebarOpen);
-
-  const getNavLinkStyle = (path: string) => {
-    const isActive = location.pathname === path;
-    return {
-      ...styles.navItem,
-      backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
-      color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
-    };
-  };
 
   useEffect(() => {
     const root = document.documentElement;
@@ -54,15 +44,36 @@ function AppContent() {
 
         {/* TOP HEADER NAVIGATION LINKS */}
         <nav style={{ display: 'flex', gap: '8px' }}>
-          <Link to="/" style={getNavLinkStyle('/')}>
+          <NavLink 
+            to="/" 
+            style={({ isActive }) => ({
+              ...styles.navItem,
+              backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+              color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+            })}
+          >
             📊 Dashboard
-          </Link>
-          <Link to="/campuses" style={getNavLinkStyle('/campuses')}>
+          </NavLink>
+          <NavLink 
+            to="/campuses" 
+            style={({ isActive }) => ({
+              ...styles.navItem,
+              backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+              color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+            })}
+          >
             🏢 Campuses
-          </Link>
-          <Link to="/students" style={getNavLinkStyle('/students')}>
+          </NavLink>
+          <NavLink 
+            to="/students" 
+            style={({ isActive }) => ({
+              ...styles.navItem,
+              backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+              color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+            })}
+          >
             🎓 Students
-          </Link>
+          </NavLink>
         </nav>
 
         <div style={{ width: '40px' }} />
@@ -82,19 +93,43 @@ function AppContent() {
         <nav>
           <ul style={styles.navLinksStack}>
             <li>
-              <Link to="/" style={getNavLinkStyle('/')} onClick={() => setIsSidebarOpen(false)}>
+              <NavLink 
+                to="/" 
+                onClick={() => setIsSidebarOpen(false)}
+                style={({ isActive }) => ({
+                  ...styles.navItem,
+                  backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+                  color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+                })}
+              >
                 📊 Dashboard
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/campuses" style={getNavLinkStyle('/campuses')} onClick={() => setIsSidebarOpen(false)}>
+              <NavLink 
+                to="/campuses" 
+                onClick={() => setIsSidebarOpen(false)}
+                style={({ isActive }) => ({
+                  ...styles.navItem,
+                  backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+                  color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+                })}
+              >
                 🏢 Campuses ({campuses.length})
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/students" style={getNavLinkStyle('/students')} onClick={() => setIsSidebarOpen(false)}>
+              <NavLink 
+                to="/students" 
+                onClick={() => setIsSidebarOpen(false)}
+                style={({ isActive }) => ({
+                  ...styles.navItem,
+                  backgroundColor: isActive ? (isDarkMode ? 'rgba(99, 102, 241, 0.2)' : '#e0e7ff') : 'transparent',
+                  color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
+                })}
+              >
                 🎓 Students ({students.length})
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </nav>
