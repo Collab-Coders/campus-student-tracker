@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useStore } from './hooks/useStore';
@@ -13,11 +13,11 @@ import Students from './pages/Students';
 function AppContent() {
   const isDarkMode = useStore((state) => state.isDarkMode);
   const toggleDarkMode = useStore((state) => state.toggleDarkMode);
+  const isSidebarOpen = useStore((state) => state.isSidebarOpen);
+  const setIsSidebarOpen = useStore((state) => state.setIsSidebarOpen);
 
   const campuses = mockCampuses;
   const students = [];
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   
   const location = useLocation();
   const styles = appLayoutStyles(isDarkMode, isSidebarOpen);
@@ -31,15 +31,40 @@ function AppContent() {
     };
   };
 
+  useEffect(() => {
+    const root = document.documentElement;
+    if (isDarkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   return (
     <div style={styles.appContainer}>
       
       {/* HAMBURGER MENU BUTTON */}
       <header style={styles.topHeader}>
-        <button type='button' aria-label='hamburger menu button' style={styles.hamburgerButton} onClick={() => setIsSidebarOpen(true)}>
-          <FaBars size={18} />
-        </button>
-        <div style={styles.headerLogo}>Campus & Student Hub</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button type='button' aria-label='hamburger menu button' style={styles.hamburgerButton} onClick={() => setIsSidebarOpen(true)}>
+            <FaBars size={18} />
+          </button>
+          <div style={styles.headerLogo}>Campus & Student Hub</div>
+        </div>
+
+        {/* TOP HEADER NAVIGATION LINKS */}
+        <nav style={{ display: 'flex', gap: '8px' }}>
+          <Link to="/" style={getNavLinkStyle('/')}>
+            📊 Dashboard
+          </Link>
+          <Link to="/campuses" style={getNavLinkStyle('/campuses')}>
+            🏢 Campuses
+          </Link>
+          <Link to="/students" style={getNavLinkStyle('/students')}>
+            🎓 Students
+          </Link>
+        </nav>
+
         <div style={{ width: '40px' }} />
       </header>
 

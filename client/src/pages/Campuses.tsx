@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 // hooks/types
 import { useStore } from '../hooks/useStore';
@@ -16,6 +17,20 @@ export default function Campuses() {
       
       {/* HEADER BAR AREA */}
       <div style={styles.headerArea}>
+        <Link 
+          to="/" 
+          style={{
+            ...styles.editButton,
+            display: 'inline-flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            marginBottom: '16px',
+            fontWeight: '700',
+            gap: '6px'
+          }}
+        >
+          ← Back to Home
+        </Link>
         <h1 style={styles.title}>Campuses Directory</h1>
         <p style={styles.subtitle}>
           Comprehensive management directory for active institutional networks.
@@ -56,7 +71,6 @@ export default function Campuses() {
                 </button>
               </div>
             </div>
-
           </div>
         ))}
       </div>
