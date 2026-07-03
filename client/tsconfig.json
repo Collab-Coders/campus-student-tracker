@@ -4,6 +4,9 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    
+    "types": ["vite/client"],
+
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
