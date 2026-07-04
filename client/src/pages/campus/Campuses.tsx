@@ -7,7 +7,9 @@ import CampusForm from './CampusForm';
 
 // hooks/types
 import { useStore } from '../../hooks/useStore';
-import { mockCampuses as initialCampuses, mockStudents, Campus } from '../../types';
+import { useCampus } from '../../hooks/useCampus';
+import { useStudent } from '../../hooks/useStudent'
+import { Student } from '../../types';
 
 // styles
 import { campusStyles } from '../../styling/campusStyles';
@@ -16,75 +18,41 @@ export default function Campuses() {
   const isDarkMode = useStore((state) => state.isDarkMode);
   const styles = campusStyles(isDarkMode);
 
-  const [campuses, setCampuses] = useState<Campus[]>(initialCampuses);
-  const [selectedCampus, setSelectedCampus] = useState<Campus | null>(null);
+  // hooks
+  const { campuses, isLoading, addCampus, updateCampus } = useCampus();
+  const { students } = useStudent();
+  
+  const [selectedCampus, setSelectedCampus] = useState<any | null>(null);
   
   const [formModal, setFormModal] = useState<{
     isOpen: boolean;
     mode: 'add' | 'edit';
-    targetCampus: Campus | null;
+    targetCampus: any | null;
   }>({
     isOpen: false,
     mode: 'add',
     targetCampus: null,
   });
 
-  const openAddModal = () => {
-    setFormModal({
-      isOpen: true,
-      mode: 'add',
-      targetCampus: null,
-    });
-  };
+  const openAddModal = () => setFormModal({ isOpen: true, mode: 'add', targetCampus: null });
+  const openEditModal = (campus: any) => setFormModal({ isOpen: true, mode: 'edit', targetCampus: campus });
+  const closeModal = () => setFormModal({ isOpen: false, mode: 'add', targetCampus: null });
 
-  const openEditModal = (campus: Campus) => {
-    setFormModal({
-      isOpen: true,
-      mode: 'edit',
-      targetCampus: campus,
-    });
-  };
-
-  const closeModal = () => {
-    setFormModal({
-      isOpen: false,
-      mode: 'add',
-      targetCampus: null,
-    });
-  };
-
-  const handleFormSave = (campusData: Omit<Campus, 'id'> & { id?: string }) => {
+  const handleFormSave = (campusData: any) => {
     if (formModal.mode === 'add') {
-      const newCampus: Campus = {
-        id: String(Date.now()), // Unique string timestamp ID
-        name: campusData.name,
-        address: campusData.address,
-        description: campusData.description,
-        imageUrl: campusData.imageUrl,
-      };
-      setCampuses([newCampus, ...campuses]);
+      addCampus(campusData);
     } else if (formModal.mode === 'edit' && formModal.targetCampus) {
-      const updated: Campus = {
-        ...formModal.targetCampus,
-        name: campusData.name,
-        address: campusData.address,
-        description: campusData.description,
-        imageUrl: campusData.imageUrl,
-      };
-      setCampuses(campuses.map((c) => (c.id === formModal.targetCampus!.id ? updated : c)));
-      if (selectedCampus?.id === formModal.targetCampus.id) setSelectedCampus(updated);
+      updateCampus({ id: formModal.targetCampus.id, data: campusData });
     }
-
     closeModal();
   };
 
-  const handleDetailSave = (updatedCampus: Campus) => {
-    setCampuses(campuses.map((c) => (c.id === updatedCampus.id ? updatedCampus : c)));
-    setSelectedCampus(updatedCampus);
-  };
+  if (isLoading) return <div>Loading Campuses...</div>;
 
   if (selectedCampus) {
-    const assignedStudents = mockStudents.filter(student => student.campusId === selectedCampus.id);
+    const assignedStudents = (students || []).filter((s: Student) => 
+    s.campusId === selectedCampus.id
+  );
 
     return (
       <CampusDetail 
@@ -93,7 +61,6 @@ export default function Campuses() {
         isDarkMode={isDarkMode}
         styles={styles}
         onBack={() => setSelectedCampus(null)}
-        onSave={handleDetailSave}
       />
     );
   }
@@ -104,39 +71,21 @@ export default function Campuses() {
       {/* HEADER BAR AREA */}
       <div style={styles.headerArea}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-          <Link 
-            to="/" 
-            style={{
-              ...styles.editButton,
-              display: 'inline-flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              fontWeight: '700',
-              gap: '6px'
-            }}
-          >
+          <Link to="/" style={{ ...styles.editButton, display: 'inline-flex', alignItems: 'center', textDecoration: 'none', fontWeight: '700', gap: '6px' }}>
             ← Back to Home
           </Link>
-
-          {/* ADD CAMPUS BUTTON CONTROL */}
-          <button 
-            type="button" 
-            onClick={openAddModal}
-            style={{ ...styles.viewButton, flex: 'initial', padding: '10px 20px' }}
-          >
+          <button type="button" onClick={openAddModal} style={{ ...styles.viewButton, flex: 'initial', padding: '10px 20px' }}>
             ➕ Add Campus
           </button>
         </div>
         
         <h1 style={styles.title}>Campuses Directory</h1>
-        <p style={styles.subtitle}>
-          Comprehensive management directory for active institutional networks.
-        </p>
+        <p style={styles.subtitle}>Comprehensive management directory for active institutional networks.</p>
       </div>
 
       {/* RESPONSIVE CARDS GRID */}
       <div style={styles.grid}>
-        {campuses.map((campus) => (
+        {(campuses || []).map((campus: any) => (
           <div key={campus.id} style={styles.card}>
             <div style={styles.imageContainer}>
               <img src={campus.imageUrl} alt={campus.name} style={styles.image} />
@@ -148,18 +97,10 @@ export default function Campuses() {
               <p style={styles.description}>{campus.description}</p>
 
               <div style={styles.actionRow}>
-                <button 
-                  type="button" 
-                  style={styles.viewButton}
-                  onClick={() => setSelectedCampus(campus)}
-                >
+                <button type="button" style={styles.viewButton} onClick={() => setSelectedCampus(campus)}>
                   View Details
                 </button>
-                <button 
-                  type="button" 
-                  style={styles.editButton}
-                  onClick={() => openEditModal(campus)}
-                >
+                <button type="button" style={styles.editButton} onClick={() => openEditModal(campus)}>
                   Edit
                 </button>
               </div>

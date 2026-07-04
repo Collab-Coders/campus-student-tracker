@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
+
+// Hooks/types
 import { useStore } from '../hooks/useStore';
-import { mockCampuses, mockStudents, Campus, Student } from '../types';
+import { useCampus } from '../hooks/useCampus';
+import { useStudent } from '../hooks/useStudent';
+import { Student } from '../types';
 
 // Components
 import CampusDetail from './campus/CampusDetail';
@@ -18,9 +22,11 @@ export default function Dashboard() {
   const campusStyle = campusStyles(isDarkMode);
   const studentStyle = studentStyles(isDarkMode);
 
-  const [campuses, setCampuses] = useState<Campus[]>(mockCampuses);
-  const [students, setStudents] = useState<Student[]>(mockStudents); 
-  const [selectedCampus, setSelectedCampus] = useState<Campus | null>(null);
+  // data fetching
+  const { campuses, isLoading: isCampusesLoading, addCampus } = useCampus();
+  const { students, isLoading: isStudentsLoading, addStudent } = useStudent();
+  
+  const [selectedCampus, setSelectedCampus] = useState<any | null>(null);
 
   // Search and Filter State
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,46 +36,24 @@ export default function Dashboard() {
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [isRegisteringStudent, setIsRegisteringStudent] = useState(false);
 
-  const handleCreateCampusSubmit = (campusData: Omit<Campus, 'id'> & { id?: string }) => {
-    const newCampus: Campus = {
-      id: String(Date.now()),
-      name: campusData.name,
-      address: campusData.address,
-      description: campusData.description,
-      imageUrl: campusData.imageUrl,
-    };
-
-    setCampuses([newCampus, ...campuses]);
+  // Handlers now trigger the TanStack Query mutations
+  const handleCreateCampusSubmit = (campusData: any) => {
+    addCampus(campusData);
     setIsAddingNew(false);
   };
 
-  const handleRegisterStudentSubmit = (studentData: Omit<Student, 'id'> & { id?: string }) => {
-    const newStudent: Student = {
-      id: String(Date.now()),
-      firstName: studentData.firstName,
-      lastName: studentData.lastName,
-      email: studentData.email,
-      gpa: studentData.gpa,
-      campusId: studentData.campusId,
-      status: studentData.status,
-      imageUrl: studentData.imageUrl,
-    };
-
-    setStudents([newStudent, ...students]);
+  const handleRegisterStudentSubmit = (studentData: any) => {
+    addStudent(studentData);
     setIsRegisteringStudent(false);
   };
 
-  const handleDetailSave = (updatedCampus: Campus) => {
-    setCampuses(campuses.map((c) => (c.id === updatedCampus.id ? updatedCampus : c)));
-    setSelectedCampus(updatedCampus);
-  };
-
-  const filteredCampuses = campuses.filter(campus => 
+  // Logic for filtering
+  const filteredCampuses = (campuses || []).filter((campus: any) => 
     campus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     campus.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const filteredStudents = students.filter(student => {
+  const filteredStudents = (students || []).filter((student: any) => {
     const matchesSearch = `${student.firstName} ${student.lastName} ${student.email}`
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -79,7 +63,9 @@ export default function Dashboard() {
 
   // CAMPUS DETAILS ROUTER VIEW OVERLAY
   if (selectedCampus) {
-    const assignedStudents = students.filter(s => s.campusId === selectedCampus.id);
+    const assignedStudents = (students || []).filter((s: Student) => 
+    s.campusId === selectedCampus.id
+  );
     return (
       <CampusDetail 
         campus={selectedCampus}
@@ -87,10 +73,12 @@ export default function Dashboard() {
         isDarkMode={isDarkMode}
         styles={campusStyle}
         onBack={() => setSelectedCampus(null)}
-        onSave={handleDetailSave}
+        onSave={(updated) => console.log("Implement update mutation here", updated)}
       />
     );
   }
+
+  if (isCampusesLoading || isStudentsLoading) return <div>Loading...</div>;
 
   return (
     <div className="DashboardWrapper" style={styles.dashboardLayout}>
@@ -125,8 +113,8 @@ export default function Dashboard() {
         {/* CAMPUSES HUB TILES */}
         <h2 style={styles.sectionHeaderTitle}>Campuses Facility Network ({filteredCampuses.length})</h2>
         <div style={styles.campusTileGrid}>
-          {filteredCampuses.map((campus) => {
-            const campusRosterCount = students.filter(s => s.campusId === campus.id).length;
+          {filteredCampuses.map((campus: any) => {
+            const campusRosterCount = (students || []).filter((s: Student) => s.campusId === campus.id).length;
 
             return (
               <div key={campus.id} style={styles.hubTileCard}>
@@ -198,8 +186,8 @@ export default function Dashboard() {
           {filteredStudents.length === 0 ? (
             <p style={styles.emptyRosterText}>No records match the current criteria.</p>
           ) : (
-            filteredStudents.map((student) => {
-              const matchedCampus = campuses.find(c => c.id === student.campusId);
+            filteredStudents.map((student: any) => {
+              const matchedCampus = (campuses || []).find((c: any) => c.id === student.campusId);
               return (
                 <div key={student.id} style={styles.rosterItemRow}>
                   <img src={student.imageUrl} alt={student.firstName} style={styles.rosterAvatar} />
@@ -215,7 +203,7 @@ export default function Dashboard() {
                     }}>
                       {student.status}
                     </span>
-                    <p style={styles.rosterGpa}>GPA: {student.gpa.toFixed(2)}</p>
+                    <p style={styles.rosterGpa}>GPA: {Number(student.gpa)?.toFixed(2) || '0.00'}</p>
                   </div>
                 </div>
               );
@@ -238,7 +226,7 @@ export default function Dashboard() {
       {isRegisteringStudent && (
         <StudentForm
           mode="add"
-          campuses={campuses}
+          campuses={campuses || []}
           styles={studentStyle}
           onClose={() => setIsRegisteringStudent(false)}
           onSave={handleRegisterStudentSubmit}

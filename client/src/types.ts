@@ -11,7 +11,7 @@ export interface CampusDetailProps {
   styles: any;
   students: Student[];
   onBack: () => void;
-  onSave: (updatedCampus: Campus) => void;
+  onSave?: (updatedCampus: Campus) => void;
 }
 export interface CampusFormProps {
   mode: 'add' | 'edit';
@@ -40,7 +40,7 @@ export interface StudentFormProps {
   onSave: (studentData: Omit<Student, 'id'> & { id?: string }) => void;
 }
 
-// @TODO: dummy data. Need to remove later
+// dummy data
 export const mockCampuses: Campus[] = [
   { id: '1', name: 'Satellite Manhattan Center', imageUrl: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=400&auto=format&fit=crop', address: '123 Enterprise Way, New York, NY 10001', description: 'A bustling urban high-rise campus specializing in technology, finance, and professional networking.' },
   { id: '2', name: 'Brooklyn Tech Hub', imageUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=400&auto=format&fit=crop', address: '456 Innovation Blvd, Brooklyn, NY 11201', description: 'Our creative flagship campus featuring state-of-the-art engineering labs, maker spaces, and modern design studios.' },
@@ -66,7 +66,7 @@ export const mockStudents: Student[] = [
     email: 'arivera@student.edu',
     gpa: 3.85,
     imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop',
-    campusId: '1', // Satellite Manhattan Center
+    campusId: 'd77b3597-4e1a-4aee-95ef-01c947adc040',
     status: 'Enrolled'
   },
   {
@@ -76,7 +76,7 @@ export const mockStudents: Student[] = [
     email: 'jchen@student.edu',
     gpa: 3.92,
     imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
-    campusId: '2', // Brooklyn Tech Hub
+    campusId: 'd77b3597-4e1a-4aee-95ef-01c947adc040',
     status: 'Enrolled'
   },
   {
@@ -86,7 +86,7 @@ export const mockStudents: Student[] = [
     email: 'tbrooks@student.edu',
     gpa: 3.40,
     imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop',
-    campusId: '2', // Brooklyn Tech Hub
+    campusId: "d77b3597-4e1a-4aee-95ef-01c947adc040",
     status: 'Enrolled'
   },
   {
@@ -96,7 +96,7 @@ export const mockStudents: Student[] = [
     email: 'mpatel@student.edu',
     gpa: 3.15,
     imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop',
-    campusId: '3', // Queens Global Campus
+    campusId: "d77b3597-4e1a-4aee-95ef-01c947adc040",
     status: 'Enrolled'
   },
   {
@@ -106,7 +106,7 @@ export const mockStudents: Student[] = [
     email: 'skaufman@student.edu',
     gpa: 3.72,
     imageUrl: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',
-    campusId: '4', // Bronx Medical Academy
+    campusId: "892c6415-cf76-4f1a-9536-3ebb26f15556",
     status: 'Enrolled'
   },
   {
@@ -116,7 +116,7 @@ export const mockStudents: Student[] = [
     email: 'mvance@student.edu',
     gpa: 2.98,
     imageUrl: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=200&auto=format&fit=crop',
-    campusId: '4', // Bronx Medical Academy
+    campusId: "892c6415-cf76-4f1a-9536-3ebb26f15556",
     status: 'Not Enrolled'
   },
   {
@@ -126,7 +126,7 @@ export const mockStudents: Student[] = [
     email: 'erostova@student.edu',
     gpa: 4.00,
     imageUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
-    campusId: '7', // Long Island Research Complex
+    campusId: "892c6415-cf76-4f1a-9536-3ebb26f15556",
     status: 'Enrolled'
   },
   {
@@ -136,7 +136,7 @@ export const mockStudents: Student[] = [
     email: 'roconnor@student.edu',
     gpa: 3.65,
     imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=200&auto=format&fit=crop',
-    campusId: '8', // Hoboken Arts Pavilion
+    campusId: "892c6415-cf76-4f1a-9536-3ebb26f15556",
     status: 'Graduated'
   }
 ];

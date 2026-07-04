@@ -26,7 +26,7 @@ export default function CampusForm({
       setName('');
       setAddress('');
       setDescription('');
-      setImageUrl('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150');
+     setImageUrl('https://cdn-icons-png.flaticon.com/512/2821/2821637.png');
     }
   }, [mode, initialData]);
 

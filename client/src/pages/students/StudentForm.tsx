@@ -39,7 +39,7 @@ export default function StudentForm({
       setGpa(4.0);
       setCampusId(campuses[0]?.id || '');
       setStatus('Enrolled');
-      setImageUrl('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'); // Default fallback profile placeholder
+      setImageUrl('https://cdn-icons-png.flaticon.com/512/1000/1000997.png'); // Default fallback profile placeholder
     }
   }, [mode, initialData, campuses]);
 
