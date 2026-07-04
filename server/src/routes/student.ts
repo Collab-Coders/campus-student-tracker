@@ -1,7 +1,6 @@
 import express from 'express';
-import { PrismaClient } from '../../generated/prisma/index.js';
+import prisma from '../lib/prisma.js';
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 // GET all students

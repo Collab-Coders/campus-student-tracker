@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from 'express';
 import cors from 'cors';
 
@@ -16,4 +17,4 @@ app.use('/api/campuses', campusRoutes);
 // --- STUDENT ROUTES ---
 app.use('/api/students', studentRoutes);
 
-app.listen(8080, () => console.log('Server running on port 3000'));
+app.listen(8080, () => console.log('Server running on port 8080'));

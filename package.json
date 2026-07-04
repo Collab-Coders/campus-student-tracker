@@ -4,9 +4,7 @@
   "description": "This is a fullstack web app built to manage college campuses and the students enrolled in them. It handles a one-to-many relationship: a campus can have many students, but a student can only belong to one campus at a time (or be completely unenrolled).",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -15,7 +13,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/Collab-Coders/campus-student-tracker/issues"
   },
