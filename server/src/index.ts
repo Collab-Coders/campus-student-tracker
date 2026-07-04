@@ -8,7 +8,7 @@ import studentRoutes from './routes/student.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors()); // @TODO: update with the deployed FE URL
 app.use(express.json());
 
 // --- CAMPUS ROUTES ---

@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, NavLink, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { useStore } from './hooks/useStore';
+import { useCampus } from './hooks/useCampus';
+import { useStudent } from './hooks/useStudent';
 import { appLayoutStyles } from './styling/styles';
-import { mockCampuses, mockStudents } from './types';
 
 // Components
 import Dashboard from './pages/Dashboard';
 import Campuses from './pages/campus/Campuses';
 import Students from './pages/students/Students';
+import { DataSeeder } from './DataSeeder';
 
 function AppContent() {
   const isDarkMode = useStore((state) => state.isDarkMode);
@@ -16,9 +18,10 @@ function AppContent() {
   const isSidebarOpen = useStore((state) => state.isSidebarOpen);
   const setIsSidebarOpen = useStore((state) => state.setIsSidebarOpen);
 
-  const campuses = mockCampuses;
-  const students = mockStudents;
-  
+  // Hook data fetching
+  const { campuses } = useCampus();
+  const { students } = useStudent();
+ 
   const styles = appLayoutStyles(isDarkMode, isSidebarOpen);
 
   useEffect(() => {
@@ -115,7 +118,7 @@ function AppContent() {
                   color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
                 })}
               >
-                🏢 Campuses ({campuses.length})
+                🏢 Campuses ({campuses?.length || 0})
               </NavLink>
             </li>
             <li>
@@ -128,7 +131,7 @@ function AppContent() {
                   color: isActive ? (isDarkMode ? '#818cf8' : '#4f46e5') : styles.navItem.color,
                 })}
               >
-                🎓 Students ({students.length})
+                🎓 Students ({students?.length || 0})
               </NavLink>
             </li>
           </ul>
@@ -138,6 +141,9 @@ function AppContent() {
           {isDarkMode ? '☀️ Light' : '🌙 Dark'} Mode
         </button>
       </aside>
+      
+      {/* SEEDER: Remove this component once your database is populated */}
+      {/* <DataSeeder /> */}
 
       {/* RIGHT MAIN VIEW CONTENT */}
       <main style={styles.mainContent}>

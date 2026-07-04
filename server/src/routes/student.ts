@@ -25,11 +25,15 @@ router.post('/', async (req, res) => {
 // PATCH - Transfer/Update student
 router.patch('/:id', async (req, res) => {
   const { id } = req.params;
-  const updatedStudent = await prisma.student.update({
-    where: { id },
-    data: req.body
-  });
-  res.json(updatedStudent);
+  try {
+    const updatedStudent = await prisma.student.update({
+      where: { id },
+      data: req.body
+    });
+    res.json(updatedStudent);
+  } catch (error) {
+    res.status(404).json({ error: "Student not found or update failed." });
+  }
 });
 
 // DELETE - Remove student
@@ -37,6 +41,15 @@ router.delete('/:id', async (req, res) => {
   const { id } = req.params;
   await prisma.student.delete({ where: { id } });
   res.status(204).send();
+});
+
+router.delete('/all', async (req, res) => {
+  try {
+    await prisma.student.deleteMany({});
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Failed to clear students." });
+  }
 });
 
 export default router;

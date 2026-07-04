@@ -1,19 +1,51 @@
 import React, { useState } from 'react';
 
-// hooks/types/components
-import { CampusDetailProps } from '../../types';
+// Components
 import CampusForm from './CampusForm';
 
-export default function CampusDetail({ campus, isDarkMode, styles, students, onBack, onSave }: CampusDetailProps) {
-  const [isEditing, setIsEditing] = useState(false);
+// hooks/types
+import { Campus, CampusDetailProps } from '../../types';
+import { useCampus } from '../../hooks/useCampus';
 
-  // Handle saving the data from our modular form overlay
-  const handleFormSave = (updatedFields: any) => {
-    onSave({ 
-      ...campus, 
-      ...updatedFields 
-    });
-    setIsEditing(false);
+export default function CampusDetail({ 
+  campus: initialCampus, 
+  isDarkMode, 
+  styles, 
+  students, 
+  onBack 
+}: CampusDetailProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  
+  // Hook usage: binding to the live campus data stream and actions
+  const { campuses, updateCampus, removeCampus } = useCampus();
+  const campus = campuses?.find((c: Campus) => c.id === initialCampus.id) || initialCampus;
+
+  // Handle saving the data
+  const handleFormSave = async (updatedFields: any) => {
+    try {
+      await updateCampus({
+        id: campus.id,
+        data: {
+          ...campus,
+          ...updatedFields
+        }
+      });
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Save failed", err);
+    }
+  };
+
+  // Handle deletion
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this campus? This cannot be undone.")) {
+      try {
+        await removeCampus(campus.id);
+        onBack();
+      } catch (err) {
+        console.error("Delete failed", err);
+      }
+    }
   };
 
   return (
@@ -24,9 +56,24 @@ export default function CampusDetail({ campus, isDarkMode, styles, students, onB
         <button type="button" onClick={onBack} style={styles.editButton}>
           ← Back to Directory
         </button>
-        <button type="button" onClick={() => setIsEditing(true)} style={styles.editButton}>
-          Edit Campus Details
-        </button>
+        
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button 
+            type="button" 
+            onClick={handleDelete} 
+            style={{ 
+              ...styles.editButton, 
+              backgroundColor: isDarkMode ? '#7f1d1d' : '#fee2e2', 
+              color: isDarkMode ? '#fca5a5' : '#dc2626', 
+              border: '1px solid transparent' 
+            }}
+          >
+            Delete Campus
+          </button>
+          <button type="button" onClick={() => setIsEditing(true)} style={styles.editButton}>
+            Edit Campus Details
+          </button>
+        </div>
       </div>
 
       {/* INDIVIDUAL CAMPUS DISPLAY VIEW */}
@@ -45,7 +92,7 @@ export default function CampusDetail({ campus, isDarkMode, styles, students, onB
           </div>
         </div>
 
-        {/* ENROLLED STUDENTS SUB-SECTION -- @TODO: make clickable for individual students */}
+        {/* ENROLLED STUDENTS SUB-SECTION */}
         <div style={{ 
           backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
           padding: '32px',

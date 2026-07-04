@@ -39,10 +39,39 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE campus
+// DELETE campus
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  await prisma.campus.delete({ where: { id } });
-  res.status(204).send();
+  
+  try {
+    // Start a transaction
+    await prisma.$transaction(async (tx) => {
+      await tx.student.deleteMany({
+        where: { campusId: id }
+      });
+      
+      await tx.campus.delete({ 
+        where: { id } 
+      });
+    });
+    
+    res.status(204).send();
+  } catch (error) {
+    console.error("Deletion error:", error);
+    res.status(500).json({ error: "Failed to delete campus and its students." });
+  }
+});
+
+// DELETE all campuses (and students)
+router.delete('/all', async (req, res) => {
+  try {
+    await prisma.student.deleteMany({});
+    await prisma.campus.deleteMany({});
+    
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Failed to clear database." });
+  }
 });
 
 export default router;
