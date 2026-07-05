@@ -51,7 +51,7 @@ export default function Dashboard() {
   const filteredCampuses = (campuses || []).filter((campus: any) => 
     campus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     campus.address.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ).sort((a: any, b: any) => a.name.localeCompare(b.name)); // A - Z
 
   const filteredStudents = (students || []).filter((student: any) => {
     const matchesSearch = `${student.firstName} ${student.lastName} ${student.email}`
@@ -59,7 +59,7 @@ export default function Dashboard() {
       .includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  }).sort((a: any, b: any) => a.firstName.localeCompare(b.firstName)); // A - Z
 
   // CAMPUS DETAILS ROUTER VIEW OVERLAY
   if (selectedCampus) {
