@@ -22,7 +22,7 @@ export const studentStyles = (isDarkMode: boolean) => {
     },
     grid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
       gap: '28px',
     },
     card: {
@@ -39,7 +39,7 @@ export const studentStyles = (isDarkMode: boolean) => {
     },
     imageContainer: {
       width: '100%',
-      height: '190px',
+      height: '300px',
       overflow: 'hidden',
     },
     image: {
@@ -60,22 +60,23 @@ export const studentStyles = (isDarkMode: boolean) => {
       color: isDarkMode ? '#f8fafc' : '#2d3748',
       letterSpacing: '-0.01em',
     },
-    address: {
-      margin: '0 0 16px 0',
+    email: {
+      margin: '0 0 6px 0',
       fontSize: '13px',
       color: isDarkMode ? '#818cf8' : '#4a5568',
       fontWeight: '600',
       opacity: isDarkMode ? 1 : 0.8,
     },
     description: {
-      margin: '0 0 24px 0',
+      margin: '0 0 6px 0',
       fontSize: '14px',
       color: isDarkMode ? '#94a3b8' : '#4a5568',
-      lineHeight: '1.6',
+      lineHeight: '1.2',
       flexGrow: 1,
     },
     actionRow: {
       display: 'flex',
+      margin: '20px 0 0 0',
       gap: '12px',
       borderTop: isDarkMode ? '1px solid #1e293b' : '1px solid #edf4f2',
       paddingTop: '20px',

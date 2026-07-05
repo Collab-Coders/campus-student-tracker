@@ -31,6 +31,14 @@ export interface Student {
   campusId: string; // referring to Campus.id
   status: 'Enrolled' | 'Not Enrolled' | 'Graduated';
 }
+export interface StudentDetailProps {
+  student: Student;
+  isDarkMode: boolean;
+  styles: any;
+  onBack: () => void;
+  onSave?: (updatedStudent: Student) => void;
+}
+
 export interface StudentFormProps {
   mode: 'add' | 'edit';
   initialData?: Student | null;

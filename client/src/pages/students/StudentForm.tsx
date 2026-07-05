@@ -218,7 +218,7 @@ export default function StudentForm({
               Cancel
             </button>
             <button type="submit" style={{ ...(styles.viewButton || styles.primaryActionButton), flex: 'initial' }}>
-              {mode === 'add' ? 'Create Campus' : 'Save Changes'}
+              {mode === 'add' ? 'Register Student' : 'Save Changes'}
             </button>
           </div>
 
