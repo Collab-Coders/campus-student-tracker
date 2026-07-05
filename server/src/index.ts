@@ -9,7 +9,8 @@ import studentRoutes from './routes/student.js';
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN ?? "http://localhost:5173" // @TODO: add VERCEL FE URL
+  origin: process.env.FRONTEND_ORIGIN ?? "http://localhost:5173", // @TODO: add VERCEL FE URL
+  credentials: true,
 }));
 app.use(express.json());
 
