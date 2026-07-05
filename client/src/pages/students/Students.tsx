@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+// components
+import StudenDetail from './StudentDetail';
+import StudentForm from './StudentForm';
+
 // hooks/types
 import { useStore } from '../../hooks/useStore';
 import { useStudent } from '../../hooks/useStudent'
@@ -82,6 +86,17 @@ export default function Students() {
           </div>
         ))}
       </div>
+
+      {/* FORM */}
+          {formModal.isOpen && (
+            <StudentForm 
+              mode={formModal.mode}
+              initialData={formModal.targetCampus}
+              styles={styles}
+              onClose={closeModal}
+              onSave={handleFormSave}
+            />
+          )}
 
     </div>
   );
