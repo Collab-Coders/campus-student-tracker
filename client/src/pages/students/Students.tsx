@@ -108,16 +108,16 @@ export default function Students() {
       </div>
 
       {/* FORM */}
-          {formModal.isOpen && (
-            <StudentForm
-              mode={formModal.mode}
-              initialData={formModal.targetStudent}
-              styles={styles}
-              campuses={campuses}
-              onClose={closeModal}
-              onSave={handleFormSave}
-            />
-          )}
+      {formModal.isOpen && (
+        <StudentForm
+          mode={formModal.mode}
+          initialData={formModal.targetStudent}
+          styles={styles}
+          campuses={campuses}
+          onClose={closeModal}
+          onSave={handleFormSave}
+         />
+      )}
 
     </div>
   );

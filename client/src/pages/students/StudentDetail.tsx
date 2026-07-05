@@ -85,7 +85,7 @@ export default function StudentDetail({
           </div>
           
           <div style={styles.profileInfo}>
-            <h1 style={styles.title}>{student.name}</h1>
+            <h1 style={styles.title}>{student.firstName} {student.lastName}</h1>
             <p style={styles.addressText}>{student.email}</p>
             <hr style={{ border: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0', margin: '16px 0' }} />
             <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', color: isDarkMode ? '#f8fafc' : '#2d3748' }}>About this Institutional Campus</h3>
