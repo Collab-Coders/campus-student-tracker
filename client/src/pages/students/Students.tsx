@@ -47,13 +47,9 @@ export default function Students() {
       closeModal();
     };
   
-    if (isLoading) return <div>Loading Campuses...</div>;
+    if (isLoading) return <div>Loading Students...</div>;
   
     if (selectedStudent) {
-      const assignedStudents = (students || []).filter((s: Student) => 
-      s.campusId === selectedStudent.id
-    );
-  
       return (
         <StudentDetail 
           student={selectedStudent}
