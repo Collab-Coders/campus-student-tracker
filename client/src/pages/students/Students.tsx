@@ -76,7 +76,7 @@ export default function Students() {
         </div>
         <h1 style={styles.title}>Students Directory</h1>
         <p style={styles.subtitle}>
-          Comprehensive management directory for active institutional networks.
+          Your complete roster for enrollment, GPA tracking, and campus assignments.
         </p>
       </div>
 
