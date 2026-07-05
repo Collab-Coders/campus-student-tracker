@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 // hooks/types
+import { useCampus } from '../../hooks/useCampus';
 import { StudentFormProps } from '../../types';
 
 export default function StudentForm({
   mode,
   initialData,
-  campuses,
   styles,
+  campuses,
   onClose,
   onSave,
 }: StudentFormProps) {
@@ -41,7 +42,7 @@ export default function StudentForm({
       setStatus('Enrolled');
       setImageUrl('https://cdn-icons-png.flaticon.com/512/1000/1000997.png'); // Default fallback profile placeholder
     }
-  }, [mode, initialData, campuses]);
+  }, [mode, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,7 +160,7 @@ export default function StudentForm({
                 style={styles.formInput}
               >
                 <option value="" disabled>Select Location...</option>
-                {campuses.map((campus) => (
+                {campuses.map((campus: any) => (
                   <option key={campus.id} value={campus.id}>
                     {campus.name}
                   </option>
@@ -213,18 +214,11 @@ export default function StudentForm({
 
           {/* Footer */}
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '28px' }}>
-            <button
-              type="button"
-              onClick={onClose}
-              style={styles.editButton}
-            >
+            <button type="button" onClick={onClose} style={styles.editButton || styles.outlineActionBtn}>
               Cancel
             </button>
-            <button
-              type="submit"
-              style={styles.viewButton}
-            >
-              {mode === 'add' ? 'Create Record' : 'Save Changes'}
+            <button type="submit" style={{ ...(styles.viewButton || styles.primaryActionButton), flex: 'initial' }}>
+              {mode === 'add' ? 'Create Campus' : 'Save Changes'}
             </button>
           </div>
 
