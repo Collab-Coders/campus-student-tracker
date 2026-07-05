@@ -11,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Campuses from './pages/campus/Campuses';
 import Students from './pages/students/Students';
 import { DataSeeder } from './DataSeeder';
+import NotFound from './pages/NotFound';
 
 function AppContent() {
   const isDarkMode = useStore((state) => state.isDarkMode);
@@ -151,6 +152,9 @@ function AppContent() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/campuses" element={<Campuses />} />
           <Route path="/students" element={<Students />} />
+
+          {/* Catch all (404 Page) */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
 

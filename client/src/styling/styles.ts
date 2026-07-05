@@ -387,3 +387,38 @@ export const dashboardStyles = (isDarkMode: boolean) => {
     },
   };
 };
+
+export const notFoundStyles = (isDarkMode: boolean) => {
+  return {
+    container: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '60vh',
+      textAlign: 'center' as const,
+      padding: '40px',
+    },
+    title: {
+      fontSize: '64px',
+      fontWeight: '800',
+      margin: '0 0 16px 0',
+      color: isDarkMode ? '#f8fafc' : '#2d3748',
+    },
+    message: {
+      fontSize: '18px',
+      color: isDarkMode ? '#94a3b8' : '#64748b',
+      marginBottom: '32px',
+    },
+    homeLink: {
+      padding: '12px 24px',
+      borderRadius: '8px',
+      backgroundColor: isDarkMode ? '#38bdf8' : '#2d3748',
+      color: isDarkMode ? '#0f172a' : '#faf8f5',
+      textDecoration: 'none',
+      fontWeight: '700',
+      fontSize: '14px',
+      transition: 'opacity 0.15s ease',
+    },
+  };
+};
