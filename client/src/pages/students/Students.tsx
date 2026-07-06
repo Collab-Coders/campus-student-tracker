@@ -19,7 +19,7 @@ export default function Students() {
   const styles = studentStyles(isDarkMode);
 
   // hooks
-  const { students, isLoading, addStudent, modifyStudentField } = useStudent();
+  const { students, isLoading, addStudent, updateStudent } = useStudent();
   const { campuses } = useCampus();
 
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
@@ -38,14 +38,22 @@ export default function Students() {
   const openEditModal = (student: any) => setFormModal({ isOpen: true, mode: 'edit', targetStudent: student });
   const closeModal = () => setFormModal({ isOpen: false, mode: 'add', targetStudent: null });
 
-  const handleFormSave = (studentData: any) => {
+  const handleFormSave = async (studentData: any) => {
+    try {
       if (formModal.mode === 'add') {
-        addStudent(studentData);
+        await addStudent(studentData);
       } else if (formModal.mode === 'edit' && formModal.targetStudent) {
-        modifyStudentField({ id: formModal.targetStudent.id, data: studentData });
+        await updateStudent({ 
+          id: formModal.targetStudent.id, 
+          data: studentData 
+        });
       }
+      
       closeModal();
-    };
+    } catch (err) {
+      console.error("Operation failed:", err);
+    }
+  };
   
     if (isLoading) return <div>Loading Students...</div>;
   
@@ -59,6 +67,10 @@ export default function Students() {
         />
       );
     }
+
+  const sortedStudents = [...(students || [])].sort((a: any, b: any) => 
+    a.firstName.localeCompare(b.firstName)
+  );
 
   return (
     <div style={styles.container}>
@@ -82,7 +94,7 @@ export default function Students() {
 
       {/* RESPONSIVE CARDS GRID */}
       <div style={styles.grid}>
-        {(students || []).map((student: any) => (
+        {(sortedStudents || []).map((student: any) => (
           <div key={student.id} style={styles.card}>
             <div style={styles.imageContainer}>
               <img src={student.imageUrl} alt={student.name} style={styles.image} />

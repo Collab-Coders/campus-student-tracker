@@ -19,11 +19,6 @@ export const useStudent = () => {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['students'] }),
   });
 
-  const patchMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: any }) => api.patchStudent(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['students'] }),
-  });
-
   const deleteMutation = useMutation({
     mutationFn: api.deleteStudent,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['students'] }),
@@ -33,9 +28,8 @@ export const useStudent = () => {
     students: data,
     isLoading,
     error,
-    addStudent: createMutation.mutate,
-    updateStudent: updateMutation.mutate,
-    modifyStudentField: patchMutation.mutate,
-    removeStudent: deleteMutation.mutate,
+    addStudent: createMutation.mutateAsync,
+    updateStudent: updateMutation.mutateAsync,
+    removeStudent: deleteMutation.mutateAsync,
   };
 };

@@ -56,25 +56,21 @@ export const api = {
   },
   updateStudent: async (id: string, data: any) => {
     const res = await fetch(`${BASE_URL}/api/students/${id}`, {
-      method: 'PUT',
+      method: 'PATCH', 
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
     if (!res.ok) throw new Error("Failed to update student");
     return res.json();
   },
-  patchStudent: async (id: string, data: any) => {
-    const res = await fetch(`${BASE_URL}/api/students/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error("Failed to patch student");
-    return res.json();
-  },
   deleteStudent: async (id: string) => {
     const res = await fetch(`${BASE_URL}/api/students/${id}`, { method: 'DELETE' });
+    
     if (!res.ok) throw new Error("Failed to delete student");
+    if (res.status === 204) {
+      return null;
+    }
+
     return res.json();
   },
 };

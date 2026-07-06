@@ -17,29 +17,27 @@ export default function StudentDetail({
   const [isEditing, setIsEditing] = useState(false);
 
   // Hook usage: binding to the live campus data stream and actions
-  const { students, modifyStudentField, removeStudent } = useStudent();
+  const { students, updateStudent, removeStudent } = useStudent();
   const { campuses } = useCampus();
   const student = students?.find((s: Student) => s.id === initialStudent.id) || initialStudent;
 
   // Handle saving the data
-  const handleFormSave = async (updatedFields: any) => {
+ const handleFormSave = async (updatedFields: any) => {
     try {
       const { id: _ignored, ...rest } = updatedFields;
-      await modifyStudentField({
+      await updateStudent({
         id: student.id,
-        data: {
-          ...student,
-          ...rest
-        }
+        data: rest
       });
+      
       setIsEditing(false);
     } catch (err) {
-      console.error("Save failed", err);
+      console.error("Failed to update student:", err);
     }
   };
 
   // Handle deletion
-  const handleDelete = async () => {
+   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this student? This cannot be undone.")) {
       try {
         await removeStudent(student.id);

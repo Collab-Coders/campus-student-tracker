@@ -65,6 +65,10 @@ export default function Campuses() {
     );
   }
 
+  const sortedCampuses = [...(campuses || [])].sort((a: any, b: any) => 
+    a.name.localeCompare(b.name)
+  );
+
   return (
     <div className='CampusWrapper' style={styles.container}>
       
@@ -85,7 +89,7 @@ export default function Campuses() {
 
       {/* RESPONSIVE CARDS GRID */}
       <div style={styles.grid}>
-        {(campuses || []).map((campus: any) => (
+        {(sortedCampuses || []).map((campus: any) => (
           <div key={campus.id} style={styles.card}>
             <div style={styles.imageContainer}>
               <img src={campus.imageUrl} alt={campus.name} style={styles.image} />
