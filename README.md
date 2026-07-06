@@ -8,7 +8,7 @@ This is our final project for **CSCI 39548: Practical Web Development** at Hunte
 
 ## Live Links
 * **Frontend UI (Vercel):** `https://campus-student-tracker.vercel.app`
-* **Backend API (Render):** `https://your-backend.onrender.com`
+* **Backend API (Render)**
 * **Database (Neon):** PostgreSQL
 
 ---
