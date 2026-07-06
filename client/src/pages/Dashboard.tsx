@@ -10,6 +10,7 @@ import { Student } from '../types';
 import CampusDetail from './campus/CampusDetail';
 import CampusForm from './campus/CampusForm';
 import StudentForm from './students/StudentForm'; 
+import Loader from '../components/Loader';
 
 // Styles
 import { dashboardStyles } from '../styling/styles';
@@ -85,7 +86,9 @@ export default function Dashboard() {
     );
   }
 
-  if (isCampusesLoading || isStudentsLoading) return <div>Loading...</div>;
+  if (isCampusesLoading || isStudentsLoading) {
+    return <Loader isDarkMode={isDarkMode} />;
+  }
 
   return (
     <div className="DashboardWrapper" style={styles.dashboardLayout}>
