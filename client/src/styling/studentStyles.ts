@@ -144,6 +144,56 @@ export const studentStyles = (isDarkMode: boolean) => {
       color: isDarkMode ? '#94a3b8' : '#4a5568',
       margin: 0,
     },
+    assignedCampus: {
+      marginTop: '20px',
+      paddingTop: '20px',
+      borderTop: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+    },
+    campusHeading: {
+      margin: '0 0 12px 0',
+      fontSize: '14px',
+      textTransform: 'uppercase' as const,
+      letterSpacing: '0.05em',
+      color: isDarkMode ? '#94a3b8' : '#718096',
+    },
+    campusContainer: {
+      display: 'flex',
+      gap: '16px',
+      alignItems: 'center',
+      flexWrap: 'wrap' as const,
+    },
+    campusImageContainer: {
+      width: '120px',
+      height: '80px',
+      borderRadius: '8px',
+      overflow: 'hidden',
+      flexShrink: 0,
+    },
+    campusImage: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    },
+    campusName: {
+      margin: '0 0 4px 0',
+      fontSize: '15px',
+      fontWeight: 700,
+      color: isDarkMode ? '#f8fafc' : '#2d3748',
+    },
+    campusAddress: {
+      margin: 0,
+      fontSize: '13px',
+      color: isDarkMode ? '#94a3b8' : '#718096',
+    },
+    noCampus: {
+      padding: '16px',
+      borderRadius: '8px',
+      backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc',
+      border: isDarkMode ? '1px dashed #334155' : '1px dashed #cbd5e1',
+      textAlign: 'center' as const,
+      color: isDarkMode ? '#94a3b8' : '#718096',
+      fontSize: '13px',
+    },
 
     // FORM & MODAL
     formCard: {

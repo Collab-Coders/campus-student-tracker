@@ -86,9 +86,6 @@ export default function StudentDetail({
             <img src={student.imageUrl} alt={`${student.firstName} ${student.lastName}`} style={styles.detailImage} />
           </div>
 
-          {/* Right column stretches to match the row height (grid default),
-              so marginTop: 'auto' on the campus block below sinks it to
-              the bottom-right of the card instead of sitting under the text. */}
           <div style={{ ...styles.profileInfo, height: '100%' }}>
             <div>
               <h1 style={styles.title}>{student.firstName} {student.lastName}</h1>
@@ -99,44 +96,23 @@ export default function StudentDetail({
               <p style={styles.descriptionText}>Status: {student.status}</p>
             </div>
 
-            {/* ASSIGNED CAMPUS — pinned to bottom-right of the card */}
-            <div style={{
-              marginTop: 'auto',
-              paddingTop: '20px',
-              borderTop: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
-            }}>
-              <h3 style={{ margin: '0 0 12px 0', fontSize: '14px', textTransform: 'uppercase' as const, letterSpacing: '0.05em', color: isDarkMode ? '#94a3b8' : '#718096' }}>
+            <div style={styles.assignedCampus}>
+              <h3 style={styles.campusHeading}>
                 Assigned Campus
               </h3>
 
               {assignedCampus ? (
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' as const }}>
-                  <div style={{ width: '120px', height: '80px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
-                    <img
-                      src={assignedCampus.imageUrl}
-                      alt={assignedCampus.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                <div style={styles.campusContainer}>
+                  <div style={styles.campusImageContainer}>
+                    <img src={assignedCampus.imageUrl} alt={assignedCampus.name} style={styles.campusImage} />
                   </div>
                   <div>
-                    <p style={{ margin: '0 0 4px 0', fontSize: '15px', fontWeight: 700, color: isDarkMode ? '#f8fafc' : '#2d3748' }}>
-                      {assignedCampus.name}
-                    </p>
-                    <p style={{ margin: 0, fontSize: '13px', color: isDarkMode ? '#94a3b8' : '#718096' }}>
-                      📍 {assignedCampus.address}
-                    </p>
+                    <p style={styles.campusName}>{assignedCampus.name}</p>
+                    <p style={styles.campusAddress}>📍 {assignedCampus.address}</p>
                   </div>
                 </div>
               ) : (
-                <div style={{
-                  padding: '16px',
-                  borderRadius: '8px',
-                  backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc',
-                  border: isDarkMode ? '1px dashed #334155' : '1px dashed #cbd5e1',
-                  textAlign: 'center' as const,
-                  color: isDarkMode ? '#94a3b8' : '#718096',
-                  fontSize: '13px',
-                }}>
+                <div style={styles.noCampus}>
                   ℹ️ Not currently assigned to a campus.
                 </div>
               )}
