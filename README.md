@@ -6,7 +6,7 @@ We built this as a single repository (monorepo) containing separate directories 
 
 This is our final project for **CSCI 39548: Practical Web Development** at Hunter College (Summer 2026).
 
-## Live Links
+## Live Link
 * **Frontend UI (Vercel):** `https://campus-student-tracker.vercel.app`
 * **Backend API (Render)**
 * **Database (Neon):** PostgreSQL
