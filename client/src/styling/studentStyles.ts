@@ -20,6 +20,67 @@ export const studentStyles = (isDarkMode: boolean) => {
       fontSize: '16px',
       fontWeight: '500',
     },
+    grid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+      gap: '28px',
+    },
+    card: {
+      backgroundColor: isDarkMode ? '#111c2a' : '#ffffff',
+      borderRadius: '16px',
+      overflow: 'hidden',
+      boxShadow: isDarkMode 
+        ? '0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4)'
+        : '0 8px 20px rgba(45, 55, 72, 0.02)',
+      border: isDarkMode ? '1px solid #1e293b' : '1px solid #d8e6e2',
+      display: 'flex',
+      flexDirection: 'column' as const,
+      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+    },
+    imageContainer: {
+      width: '100%',
+      height: '300px',
+      overflow: 'hidden',
+    },
+    image: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover' as const,
+    },
+    contentArea: {
+      padding: '24px',
+      flexGrow: 1,
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
+    studentName: {
+      margin: '0 0 8px 0',
+      fontSize: '20px',
+      fontWeight: '700',
+      color: isDarkMode ? '#f8fafc' : '#2d3748',
+      letterSpacing: '-0.01em',
+    },
+    email: {
+      margin: '0 0 6px 0',
+      fontSize: '13px',
+      color: isDarkMode ? '#818cf8' : '#4a5568',
+      fontWeight: '600',
+      opacity: isDarkMode ? 1 : 0.8,
+    },
+    description: {
+      margin: '0 0 6px 0',
+      fontSize: '14px',
+      color: isDarkMode ? '#94a3b8' : '#4a5568',
+      lineHeight: '1.2',
+      flexGrow: 1,
+    },
+    actionRow: {
+      display: 'flex',
+      margin: '20px 0 0 0',
+      gap: '12px',
+      borderTop: isDarkMode ? '1px solid #1e293b' : '1px solid #edf4f2',
+      paddingTop: '20px',
+    },
     editButton: {
       padding: '10px 16px',
       borderRadius: '8px',
@@ -43,8 +104,99 @@ export const studentStyles = (isDarkMode: boolean) => {
       transition: 'all 0.2s ease',
     },
 
-   // FORM & MODAL
-   formCard: {
+    // Student Detail
+    detailContainer: {
+      animation: 'fadeIn 0.2s ease-out',
+    },
+    profileLayout: {
+      display: 'grid',
+      gridTemplateColumns: 'minmax(300px, 450px) 1fr',
+      gap: '32px',
+      backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+      padding: '32px',
+      borderRadius: '12px',
+      boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0,0,0,0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
+    },
+    detailImageWrapper: {
+      width: '450px',
+      height: '100%',
+      borderRadius: '8px',
+      overflow: 'hidden',
+    },
+    detailImage: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover' as const,
+    },
+    profileInfo: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
+    addressText: {
+      fontSize: '15px',
+      color: isDarkMode ? '#38bdf8' : '#4f46e5',
+      fontWeight: '600',
+      margin: '4px 0 0 0',
+    },
+    descriptionText: {
+      fontSize: '15px',
+      lineHeight: '1.6',
+      color: isDarkMode ? '#94a3b8' : '#4a5568',
+      margin: 0,
+    },
+    assignedCampus: {
+      marginTop: '20px',
+      paddingTop: '20px',
+      borderTop: isDarkMode ? '1px solid #334155' : '1px solid #e2e8f0',
+    },
+    campusHeading: {
+      margin: '0 0 12px 0',
+      fontSize: '14px',
+      textTransform: 'uppercase' as const,
+      letterSpacing: '0.05em',
+      color: isDarkMode ? '#94a3b8' : '#718096',
+    },
+    campusContainer: {
+      display: 'flex',
+      gap: '16px',
+      alignItems: 'center',
+      flexWrap: 'wrap' as const,
+    },
+    campusImageContainer: {
+      width: '120px',
+      height: '80px',
+      borderRadius: '8px',
+      overflow: 'hidden',
+      flexShrink: 0,
+    },
+    campusImage: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    },
+    campusName: {
+      margin: '0 0 4px 0',
+      fontSize: '15px',
+      fontWeight: 700,
+      color: isDarkMode ? '#f8fafc' : '#2d3748',
+    },
+    campusAddress: {
+      margin: 0,
+      fontSize: '13px',
+      color: isDarkMode ? '#94a3b8' : '#718096',
+    },
+    noCampus: {
+      padding: '16px',
+      borderRadius: '8px',
+      backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc',
+      border: isDarkMode ? '1px dashed #334155' : '1px dashed #cbd5e1',
+      textAlign: 'center' as const,
+      color: isDarkMode ? '#94a3b8' : '#718096',
+      fontSize: '13px',
+    },
+
+    // FORM & MODAL
+    formCard: {
       backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
       color: isDarkMode ? '#f8fafc' : '#2d3748',
       padding: '32px',
