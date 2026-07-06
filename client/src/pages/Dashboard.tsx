@@ -22,36 +22,45 @@ export default function Dashboard() {
   const campusStyle = campusStyles(isDarkMode);
   const studentStyle = studentStyles(isDarkMode);
 
-  // data fetching
   const { campuses, isLoading: isCampusesLoading, addCampus } = useCampus();
-  const { students, isLoading: isStudentsLoading, addStudent } = useStudent();
+  const { students, isLoading: isStudentsLoading, addStudent, updateStudent } = useStudent();
   
   const [selectedCampus, setSelectedCampus] = useState<any | null>(null);
+  const [editingStudent, setEditingStudent] = useState<any | null>(null);
 
   // Search and Filter State
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  // Modal Control Toggle Flags
+  // Modal Control
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [isRegisteringStudent, setIsRegisteringStudent] = useState(false);
 
-  // Handlers now trigger the TanStack Query mutations
+  // Handlers
   const handleCreateCampusSubmit = (campusData: any) => {
     addCampus(campusData);
     setIsAddingNew(false);
   };
 
-  const handleRegisterStudentSubmit = (studentData: any) => {
-    addStudent(studentData);
-    setIsRegisteringStudent(false);
+  const handleFormSave = async (studentData: any) => {
+    try {
+      if (editingStudent) {
+        await updateStudent({ id: editingStudent.id, data: studentData });
+      } else {
+        await addStudent(studentData);
+      }
+      setIsRegisteringStudent(false);
+      setEditingStudent(null);
+    } catch (err) {
+      console.error("Operation failed:", err);
+    }
   };
 
-  // Logic for filtering
+  // Logic for filtering and sorting
   const filteredCampuses = (campuses || []).filter((campus: any) => 
     campus.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     campus.address.toLowerCase().includes(searchTerm.toLowerCase())
-  ).sort((a: any, b: any) => a.name.localeCompare(b.name)); // A - Z
+  ).sort((a: any, b: any) => a.name.localeCompare(b.name));
 
   const filteredStudents = (students || []).filter((student: any) => {
     const matchesSearch = `${student.firstName} ${student.lastName} ${student.email}`
@@ -59,13 +68,11 @@ export default function Dashboard() {
       .includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
     return matchesSearch && matchesStatus;
-  }).sort((a: any, b: any) => a.firstName.localeCompare(b.firstName)); // A - Z
+  }).sort((a: any, b: any) => a.firstName.localeCompare(b.firstName));
 
   // CAMPUS DETAILS ROUTER VIEW OVERLAY
   if (selectedCampus) {
-    const assignedStudents = (students || []).filter((s: Student) => 
-    s.campusId === selectedCampus.id
-  );
+    const assignedStudents = (students || []).filter((s: Student) => s.campusId === selectedCampus.id);
     return (
       <CampusDetail 
         campus={selectedCampus}
@@ -88,52 +95,38 @@ export default function Dashboard() {
         <div style={styles.welcomeHeader}>
           <div>
             <h1 style={styles.mainTitle}>Campus & Student Roster</h1>
-            <p style={styles.mainSubtitle}>Your central workspace for organizing campuses, tracking facilities, and keeping up with students.</p>
+            <p style={styles.mainSubtitle}>Your central workspace for organizing campuses and tracking students.</p>
           </div>
-          <button 
-            type="button" 
-            onClick={() => setIsAddingNew(true)} 
-            style={styles.primaryActionButton}
-          >
+          <button type="button" onClick={() => setIsAddingNew(true)} style={styles.primaryActionButton}>
             ➕ Add New Campus
           </button>
         </div>
 
-        {/* SEARCH AND CONTROL BAR */}
         <div style={styles.searchBarRow}>
           <input 
             type="text" 
-            placeholder="Search campuses or students by name, email, location..." 
+            placeholder="Search campuses..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={styles.globalSearchInput}
           />
         </div>
 
-        {/* CAMPUSES HUB TILES */}
         <h2 style={styles.sectionHeaderTitle}>Campuses Facility Network ({filteredCampuses.length})</h2>
         <div style={styles.campusTileGrid}>
           {filteredCampuses.map((campus: any) => {
             const campusRosterCount = (students || []).filter((s: Student) => s.campusId === campus.id).length;
-
             return (
               <div key={campus.id} style={styles.hubTileCard}>
                 <div style={styles.tileImageContainer}>
                   <img src={campus.imageUrl} alt={campus.name} style={styles.tileImage} />
-                  <span style={styles.rosterCountBadge}>
-                    🎓 {campusRosterCount} Assigned
-                  </span>
+                  <span style={styles.rosterCountBadge}>🎓 {campusRosterCount} Assigned</span>
                 </div>
                 <div style={styles.tileBody}>
                   <h3 style={styles.tileName}>{campus.name}</h3>
                   <p style={styles.tileAddress}>📍 {campus.address}</p>
-                  <p style={styles.tileDesc}>{campus.description}</p>
                   <div style={styles.tileActions}>
-                    <button 
-                      type="button" 
-                      style={{ ...styles.solidActionBtn, width: '100%', flex: 'initial' }}
-                      onClick={() => setSelectedCampus(campus)}
-                    >
+                    <button type="button" style={{ ...styles.solidActionBtn, width: '100%' }} onClick={() => setSelectedCampus(campus)}>
                       View Details →
                     </button>
                   </div>
@@ -149,16 +142,11 @@ export default function Dashboard() {
         <div style={styles.rosterStickyHeader}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h3 style={styles.panelHeaderTitle}>Global Student Roster</h3>
-            <button 
-              type="button" 
-              onClick={() => setIsRegisteringStudent(true)} 
-              style={styles.textActionLink}
-            >
+            <button type="button" onClick={() => setIsRegisteringStudent(true)} style={styles.textActionLink}>
               + Register
             </button>
           </div>
 
-          {/* QUICK STATUS FILTER PILLS */}
           <div style={{ display: 'flex', gap: '6px', marginBottom: '4px' }}>
             {['All', 'Enrolled', 'Graduated', 'Not Enrolled'].map((status) => (
               <button
@@ -167,12 +155,8 @@ export default function Dashboard() {
                 onClick={() => setStatusFilter(status)}
                 style={{
                   ...styles.filterPillBtn,
-                  backgroundColor: statusFilter === status 
-                    ? (isDarkMode ? '#38bdf8' : '#2d3748') 
-                    : (isDarkMode ? '#1e293b' : '#edf4f2'),
-                  color: statusFilter === status 
-                    ? (isDarkMode ? '#0f172a' : '#faf8f5') 
-                    : (isDarkMode ? '#94a3b8' : '#4a5568'),
+                  backgroundColor: statusFilter === status ? (isDarkMode ? '#38bdf8' : '#2d3748') : (isDarkMode ? '#1e293b' : '#edf4f2'),
+                  color: statusFilter === status ? (isDarkMode ? '#0f172a' : '#faf8f5') : (isDarkMode ? '#94a3b8' : '#4a5568'),
                 }}
               >
                 {status}
@@ -183,56 +167,45 @@ export default function Dashboard() {
 
         {/* SCROLLABLE STUDENT LIST */}
         <div style={styles.rosterScrollArea}>
-          {filteredStudents.length === 0 ? (
-            <p style={styles.emptyRosterText}>No records match the current criteria.</p>
-          ) : (
-            filteredStudents.map((student: any) => {
-              const matchedCampus = (campuses || []).find((c: any) => c.id === student.campusId);
-              return (
-                <div key={student.id} style={styles.rosterItemRow}>
-                  <img src={student.imageUrl} alt={student.firstName} style={styles.rosterAvatar} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={styles.rosterName}>{student.firstName} {student.lastName}</p>
-                    <p style={styles.rosterSubtext}>{matchedCampus?.name || 'Unassigned Center'}</p>
-                  </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <span style={{
-                      ...styles.statusBadge,
-                      backgroundColor: student.status === 'Enrolled' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(148, 163, 184, 0.15)',
-                      color: student.status === 'Enrolled' ? '#10b981' : (isDarkMode ? '#94a3b8' : '#64748b'),
-                    }}>
-                      {student.status}
-                    </span>
-                    <p style={styles.rosterGpa}>GPA: {Number(student.gpa)?.toFixed(2) || '0.00'}</p>
-                  </div>
-                </div>
-              );
-            })
-          )}
+          {filteredStudents.map((student: any) => (
+            <div 
+              key={student.id} 
+              style={{ ...styles.rosterItemRow, cursor: 'pointer' }}
+              onClick={() => {
+                setEditingStudent(student);
+                setIsRegisteringStudent(true);
+              }}
+            >
+              <img src={student.imageUrl} alt={student.firstName} style={styles.rosterAvatar} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={styles.rosterName}>{student.firstName} {student.lastName}</p>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <p style={styles.rosterGpa}>GPA: {Number(student.gpa)?.toFixed(2)}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* CAMPUS MODAL FORM */}
+      {/* MODALS */}
       {isAddingNew && (
-        <CampusForm 
-          mode="add"
-          styles={campusStyle}
-          onClose={() => setIsAddingNew(false)}
-          onSave={handleCreateCampusSubmit}
-        />
+        <CampusForm mode="add" styles={campusStyle} onClose={() => setIsAddingNew(false)} onSave={handleCreateCampusSubmit} />
       )}
 
-      {/* STUDENT MODAL FORM */}
       {isRegisteringStudent && (
         <StudentForm
-          mode="add"
+          mode={editingStudent ? "edit" : "add"}
+          initialData={editingStudent}
           campuses={campuses || []}
           styles={studentStyle}
-          onClose={() => setIsRegisteringStudent(false)}
-          onSave={handleRegisterStudentSubmit}
+          onClose={() => {
+            setIsRegisteringStudent(false);
+            setEditingStudent(null);
+          }}
+          onSave={handleFormSave}
         />
       )}
-
     </div>
   );
 }
