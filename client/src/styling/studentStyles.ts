@@ -105,7 +105,7 @@ export const studentStyles = (isDarkMode: boolean) => {
     },
 
     // Student Detail
-        detailContainer: {
+    detailContainer: {
       animation: 'fadeIn 0.2s ease-out',
     },
     profileLayout: {
@@ -118,8 +118,8 @@ export const studentStyles = (isDarkMode: boolean) => {
       boxShadow: isDarkMode ? '0 10px 15px -3px rgba(0,0,0,0.3)' : '0 4px 6px -1px rgba(0,0,0,0.05)',
     },
     detailImageWrapper: {
-      width: '100%',
-      height: '300px',
+      width: '450px',
+      height: '100%',
       borderRadius: '8px',
       overflow: 'hidden',
     },

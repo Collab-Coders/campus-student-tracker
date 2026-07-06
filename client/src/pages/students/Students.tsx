@@ -19,7 +19,7 @@ export default function Students() {
   const styles = studentStyles(isDarkMode);
 
   // hooks
-  const { students, isLoading, addStudent, updateStudent } = useStudent();
+  const { students, isLoading, addStudent, modifyStudentField } = useStudent();
   const { campuses } = useCampus();
 
   const [selectedStudent, setSelectedStudent] = useState<any | null>(null);
@@ -42,7 +42,7 @@ export default function Students() {
       if (formModal.mode === 'add') {
         addStudent(studentData);
       } else if (formModal.mode === 'edit' && formModal.targetStudent) {
-        updateStudent({ id: formModal.targetStudent.id, data: studentData });
+        modifyStudentField({ id: formModal.targetStudent.id, data: studentData });
       }
       closeModal();
     };
