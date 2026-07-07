@@ -91,8 +91,7 @@ export default function StudentForm({
       lastName: lastName.trim(),
       email: email.trim(),
       gpa: Number(gpa),
-      // If Not Enrolled, set campusId to null
-      campusId,
+      campusId: (campusId === '' || campusId === undefined) ? null : campusId,
       status,
       imageUrl: imageUrl.trim(),
     });
