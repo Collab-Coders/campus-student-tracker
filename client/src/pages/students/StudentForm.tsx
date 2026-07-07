@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // hooks/types
 import { useCampus } from '../../hooks/useCampus';
@@ -21,6 +21,14 @@ export default function StudentForm({
   const [imageUrl, setImageUrl] = useState('');
 
   const [error, setError] = useState('');
+
+  const firstNameInputRef = useRef<HTMLInputElement>(null);
+  
+    useEffect(() => {
+      if (mode === 'add' && firstNameInputRef.current) {
+        firstNameInputRef.current.focus();
+      }
+    }, []);
 
   const handleStatusChange = (newStatus: 'Enrolled' | 'Graduated' | 'Not Enrolled') => {
     setStatus(newStatus);
@@ -128,6 +136,7 @@ export default function StudentForm({
             <div style={styles.formGroup}>
               <label htmlFor="student-firstname" style={styles.formLabel}>First Name</label>
               <input
+                ref={firstNameInputRef}
                 id="student-firstname"
                 type="text"
                 value={firstName}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // hooks/types
 import { CampusFormProps } from '../../types';
@@ -15,6 +15,14 @@ export default function CampusForm({
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState(''); // error state
+
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (mode === 'add' && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (mode === 'edit' && initialData) {
@@ -78,6 +86,7 @@ export default function CampusForm({
         <div style={styles.formGroup}>
           <label htmlFor="form-name" style={styles.formLabel}>Campus Name</label>
           <input 
+            ref={nameInputRef}
             id="form-name"
             type="text" 
             value={name} 
