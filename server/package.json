@@ -9,7 +9,7 @@
     "start": "prisma migrate deploy && node dist/index.js",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force",
-    "seed": "tsx seed.ts"
+    "seed": "tsx src/seed.ts"
   },
   "keywords": [],
   "author": "",
