@@ -25,14 +25,19 @@ router.post('/', async (req, res) => {
 // PATCH - Transfer/Update student
 router.patch('/:id', async (req, res) => {
   const { id } = req.params;
+  const { firstName, lastName, email, gpa, imageUrl, campusId, status } = req.body;
+  
   try {
     const updatedStudent = await prisma.student.update({
       where: { id },
-      data: req.body
+      data: { 
+        firstName, lastName, email, gpa, imageUrl, campusId, status 
+      }
     });
     res.json(updatedStudent);
   } catch (error) {
-    res.status(404).json({ error: "Student not found or update failed." });
+    console.error("Patch Error:", error);
+    res.status(404).json({ error: "Update failed." });
   }
 });
 

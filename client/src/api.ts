@@ -25,19 +25,19 @@ export const api = {
     if (!res.ok) throw new Error("Failed to update campus");
     return res.json();
   },
- deleteCampus: async (id: string) => {
-  const res = await fetch(`${BASE_URL}/api/campuses/${id}`, { 
-    method: 'DELETE' 
-  });
-  if (!res.ok) {
-    throw new Error("Failed to delete campus");
-  }
-  if (res.status === 204) {
-    return null; 
-  }
+  deleteCampus: async (id: string) => {
+    const res = await fetch(`${BASE_URL}/api/campuses/${id}`, { 
+      method: 'DELETE' 
+    });
+    if (!res.ok) {
+      throw new Error("Failed to delete campus");
+    }
+    if (res.status === 204) {
+      return null; 
+    }
 
-  return res.json();
-},
+    return res.json();
+  },
 
   // --- STUDENTS ---
   getStudents: async () => {

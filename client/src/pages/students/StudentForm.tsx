@@ -16,11 +16,18 @@ export default function StudentForm({
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [gpa, setGpa] = useState<number>(0.0);
-  const [campusId, setCampusId] = useState('');
+  const [campusId, setCampusId] = useState<string | null>(null);
   const [status, setStatus] = useState<'Enrolled' | 'Graduated' | 'Not Enrolled'>('Enrolled');
   const [imageUrl, setImageUrl] = useState('');
 
   const [error, setError] = useState('');
+
+  const handleStatusChange = (newStatus: 'Enrolled' | 'Graduated' | 'Not Enrolled') => {
+    setStatus(newStatus);
+    if (newStatus === 'Not Enrolled') {
+      setCampusId(null);
+    }
+  };
 
   // Prefill form fields if editing an existing student profile
   useEffect(() => {
@@ -29,20 +36,24 @@ export default function StudentForm({
       setLastName(initialData.lastName);
       setEmail(initialData.email);
       setGpa(initialData.gpa);
-      setCampusId(initialData.campusId);
       setStatus(initialData.status);
       setImageUrl(initialData.imageUrl || '');
+
+      // FIX: Check if the assigned campus still exists in the database.
+      // If deleted, we reset to null to prevent API 404/500 errors.
+      const campusExists = campuses.find((c) => c.id === initialData.campusId);
+      setCampusId(campusExists ? initialData.campusId : null);
     } else {
       // Reset values if in "add" mode
       setFirstName('');
       setLastName('');
       setEmail('');
       setGpa(4.0);
-      setCampusId(campuses[0]?.id || '');
+      setCampusId(campuses[0]?.id || null);
       setStatus('Enrolled');
       setImageUrl('https://cdn-icons-png.flaticon.com/512/1000/1000997.png'); // Default fallback profile placeholder
     }
-  }, [mode, initialData]);
+  }, [mode, initialData, campuses]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +69,8 @@ export default function StudentForm({
       return;
     }
 
-    if (!campusId) {
+    // Logic Fix: Only require campusId if status is NOT 'Not Enrolled'
+    if (status !== 'Not Enrolled' && !campusId) {
       setError('Please assign this student to a campus destination.');
       return;
     }
@@ -71,6 +83,7 @@ export default function StudentForm({
       lastName: lastName.trim(),
       email: email.trim(),
       gpa: Number(gpa),
+      // If Not Enrolled, set campusId to null
       campusId,
       status,
       imageUrl: imageUrl.trim(),
@@ -155,11 +168,12 @@ export default function StudentForm({
               <label htmlFor="student-campus" style={styles.formLabel}>Assigned Campus Facility</label>
               <select
                 id="student-campus"
-                value={campusId}
-                onChange={(e) => setCampusId(e.target.value)}
-                style={styles.formInput}
+                value={campusId ?? ''}
+                onChange={(e) => setCampusId(e.target.value === '' ? null : e.target.value)}
+                disabled={status === 'Not Enrolled'}
+                style={{ ...styles.formInput, opacity: status === 'Not Enrolled' ? 0.6 : 1 }}
               >
-                <option value="" disabled>Select Location...</option>
+                <option value="">{status === 'Not Enrolled' ? 'Not Assigned' : 'Select Location...'}</option>
                 {campuses.map((campus: any) => (
                   <option key={campus.id} value={campus.id}>
                     {campus.name}
@@ -190,7 +204,7 @@ export default function StudentForm({
             <select
               id="student-status"
               value={status}
-              onChange={(e) => setStatus(e.target.value as any)}
+              onChange={(e) => handleStatusChange(e.target.value as any)}
               style={styles.formInput}
             >
               <option value="Enrolled">Enrolled</option>

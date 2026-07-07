@@ -41,9 +41,9 @@ export default function CampusDetail({
     if (window.confirm("Are you sure you want to delete this campus? This cannot be undone.")) {
       try {
         await removeCampus(campus.id);
-        onBack();
+        onBack(); 
       } catch (err) {
-        console.error("Delete failed", err);
+        console.error("Delete failed:", err);
       }
     }
   };

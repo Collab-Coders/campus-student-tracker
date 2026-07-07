@@ -28,7 +28,7 @@ export interface Student {
   email: string;
   gpa: number;
   imageUrl: string;
-  campusId: string; // referring to Campus.id
+  campusId: string | null; // referring to Campus.id
   status: 'Enrolled' | 'Not Enrolled' | 'Graduated';
 }
 export interface StudentDetailProps {

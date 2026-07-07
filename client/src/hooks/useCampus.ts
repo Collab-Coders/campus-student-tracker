@@ -21,7 +21,11 @@ export const useCampus = () => {
 
   const deleteMutation = useMutation({
     mutationFn: api.deleteCampus,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['campuses'] }),
+    onSuccess: () => {
+      // Invalidate BOTH campuses and students
+      queryClient.invalidateQueries({ queryKey: ['campuses'] });
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+    },
   });
 
   return {
